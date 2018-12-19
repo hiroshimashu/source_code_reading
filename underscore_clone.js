@@ -128,4 +128,34 @@
     return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX
     }
 
+    _.each = _.forEach = function(obj, iteratee, context) {
+        iteratee = optimizeCB(iteratee, context);
+        var i, length;
+        if(isArrayLike(obj)) {
+            for (i = 0, length = obj.length; i < length; i++) {
+                iteratee(obj[i], i, obj);
+            }
+        } else {
+            var keys = _.keys(obj);
+            for (i = 0, length = keys.length; i < length; i++) {
+                iteratee(obj[keys[i]], keys[i], obj);
+            }
+        }
+        return obj;
+    };
+
+    _.map = _.collect = function(obj, iteratee, contex) {
+        iteratee = obj(iteratee, context);
+        var keys = !isArrayLike(obj) && _.keys(obj),
+            length = (keys || obj).length,
+            results = Array(length);
+        for (var index = 0; index < length; index++) {
+            var currentKey = keys ? keys[index] : index;
+            results[index] = iteratee(obj[currentKey], currentKey, obj);
+        }
+        return results;
+
+    }
+
+
 }())
