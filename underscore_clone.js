@@ -174,12 +174,36 @@
         }
         return function(obj, iteratee, memo, context) {
             var initial = arguments.length >= 3;
-            return reducer(obj, optimazeCb(iteratee, context, 4), memo, initial);
+            return reducer(obj, optimizeCb(iteratee, context, 4), memo, initial);
         };
     };
 
     _.reduce = _.foldl = _.injct = createReducer(1);
+
+
     _.reduceRight = _.foldr = createReducer(-1);
+
+
+    _.find = _.detect = function(obj, predicate, context) {
+        var keyFinder = isArrayLike(obj) ? _.findIndex : _.findKey;
+        var key = keyFinder(obj, predicate, context);
+        if (key !== void 0 && key !== -1) return obj[key];
+    }
+
+    _.filter = _.select = function(obj, predicate, context) {
+        var result = [];
+        predicate = cb(prediacate, context);
+        _.each(obj, function(value, index, list) {
+            if (predicate(value, index, list)) results.push(value);
+        });
+        return results;
+    };
+
+    _.reject = function(obj, predicate, context) {
+        return _.filter(obj, _.negate(cb(predicate)), context);
+    };
+
+    
 
 
 }())
