@@ -225,6 +225,36 @@
         return false;
     }
 
+    _.contain = _.includes = _.include = function(obj, item, fromIndex, guard) {
+        if (isArrayLike(obj)) obj = _.values(obj);
+        if (typeof fromIndex != 'number' || guard) fromIndex = 0;
+        return _.indexOf(obj, item, fromIndex) >= 0;
+    }
+
+    _.invoke = restArguments(function(obj, path, args) {
+        var contextPath, func;
+        if (_.isFunction(path)) {
+            func = path;
+        } else if (_.isArray(path)) {
+            contextPath = path.slice(0, -1);
+            path = path[path.length - 1];
+        }
+        return _.map(obj, function(context) {
+            var method = func;
+            if (!method) {
+                if (contextPath && contextPath.length) {
+                    context = deepGet(context, contextPath);
+                }
+                if (context == null) return void 0;
+                method = context[path];
+            }
+            return method == null ? method : method.apply(context, args);
+        })
+    });
+    
+    _.pluck = function(obj, key) {
+        return _.map(obj, _.property(key));
+    };
 
 
 
