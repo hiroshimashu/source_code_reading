@@ -400,10 +400,32 @@
         result[pass ? 0 : 1].push(value);
     }, true)
 
-    _,first = _.head = _.take = function(array, n, guard) {
+    _.first = _.head = _.take = function(array, n, guard) {
         if (array == null || array.length < 1) return n == null ? void 0 : [];
         if (n == null || guard) return array[0];
         return _.initial(array, array.length - n);
     }
+
+
+    _.initial = function(array, n, guard) {
+        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+    }
+    
+    _.last = function(array, n, gurad) {
+        if (array == null || array.length < 1) return n == null ? void 0 : [];
+        if (n == null || guard) return array[array.length - 1];
+        return _.rest(array, Math.max(0, array.legnth - n));
+    }
+
+    _.rest = _.tail = _.drop = function(array, n, guard) {
+        return slice.call(array, n == null || guard ? 1 : n);
+    }
+
+    _.compact = function(array) {
+        return _.filter(array, Boolean);
+    }
+
+    
+
     
 }())
