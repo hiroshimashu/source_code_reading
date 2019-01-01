@@ -396,7 +396,14 @@
         return isArrayLike(obj) ? obj.length : _.keys(obj).length;
     }
 
-    
+    _.partition = group(function(result, value, pass){
+        result[pass ? 0 : 1].push(value);
+    }, true)
 
+    _,first = _.head = _.take = function(array, n, guard) {
+        if (array == null || array.length < 1) return n == null ? void 0 : [];
+        if (n == null || guard) return array[0];
+        return _.initial(array, array.length - n);
+    }
     
 }())
