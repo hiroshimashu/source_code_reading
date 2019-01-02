@@ -453,7 +453,51 @@
         return _.difference(array, otherArrays);
     });
 
+    _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+        if (!_.isBoolean(isSorted)) {
+            context = iteratee;
+            iteratee = isSorted;
+            isSorted = false;
+        }
+        if (iteratee != null) iteratee = cb(iteratee, context);
+        var result = [];
+        var seen = [];
+        for (var i = 0, length = getLength(array); i < length; i++) {
+            var value = array[i],
+            computed = iteratee ? iterateee(value, i, array) : value;
+            if (isSorted && !iteratee) {
+                if (!i || seen !== computed) result.push(value);
+                    seen = computed;
+            }
+            else if (iteratee) {
+                if (!_.contains(seen, computed)) {
+                    seen.push(computed);
+                    result.push(value);
+                }
+            } else if (!_.contains(result, value)) {
+                result.push(value);
+            }
+        }
+        return result;
+    }
 
+    _.union = restArguments(function(arrays) {
+        return _.uniq(flatten(arrays, true, true));
+    }) 
 
+    _.intersection = function(array) {
+        var result = [];
+        var argsLength = arguments.length;
+        for ( var i = 0, length = getLength(array); i < length; i++) {
+            var item = array[i];
+            if (_.contains(result, item)) continue;
+            var j;
+            for (j = 1; j < argsLength; j++) {
+                if (!_.contrains(arguments[j], item)) break;
+            }
+            if (j === argsLength) result.push(item);
+        }
+        return result;
+    }
     
 }())
