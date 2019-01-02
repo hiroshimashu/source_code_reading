@@ -425,7 +425,35 @@
         return _.filter(array, Boolean);
     }
 
-    
+    var flatten = function(input, shallow, strict, output) {
+        output = output || [];
+        var idx = output.length;
+        for (var i = 0, length = getLength(input); i <length; i++) {
+            var value = input[i];
+            if (isArrayLike(value) && (_.isArrayLike(value) || _.isArguments(value))) {
+                if (shallow) {
+                    var j =0, len = value.length;
+                    while (j < len) output[idx++] = value[j++];
+                } else {
+                    flatten(value, shallow, strict, output);
+                    idx = output.length;
+                }
+            } else if (!strict) {
+                output[idx++] = value;
+            }
+        }
+        return output;
+    };
+
+    _.flatten = function(array, shallow) {
+        return flatten(array, shallow, false);
+    };
+
+    _.without = restArguments(function(array, otherArrays) {
+        return _.difference(array, otherArrays);
+    });
+
+
 
     
 }())
